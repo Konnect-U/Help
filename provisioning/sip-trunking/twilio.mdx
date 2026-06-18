@@ -1,55 +1,38 @@
 ---
-title: "Twilio Integration"
-description: "A step by step guide to connect your Twilio phone numbers via Elastic SIP Trunking"
+title: "Twilio SIP Trunking"
+icon: "phone-volume"
+description: "Connect your Twilio Elastic SIP Trunk to Konnect-U for inbound and outbound AI calls"
 ---
 
-This guide walks you through connecting your Twilio phone numbers using Elastic SIP Trunking. You'll create a SIP trunk in Twilio, assign your numbers to it, and import them into the platform.
+# Twilio SIP Trunking Setup
 
-<Tip>
-**One-time setup:** You only need to create the Elastic SIP Trunk once (Step 1). For each additional phone number after that, you simply add it to your existing trunk (Step 2) and import it (Step 3).
-</Tip>
+This guide walks you through connecting your Twilio Elastic SIP Trunk to Konnect-U so your AI assistant can make and receive calls using your existing Twilio phone numbers.
 
-## Step 1: Create Elastic SIP Trunking
+## Prerequisites
 
-1. Log in to your [Twilio Console](https://console.twilio.com)
-2. In the **search bar** at the top of the dashboard, type **"Elastic SIP Trunking"** and click the result
+Before you begin, make sure you have:
 
-   Alternatively, click the **"..."** menu on the left sidebar for **All Products & Services**, then scroll down and click **Elastic SIP Trunking**
+- A Twilio account with **Elastic SIP Trunking** enabled
+- At least one Twilio phone number
+- Access to the Konnect-U dashboard
 
-3. Click **Create new SIP Trunk** and give it a **Friendly name** (e.g., `autocalls`)
+## Step 1: Create and Configure Your SIP Trunk in Twilio
 
-   <Frame>
-     <img
-       src="/resources/twillio-create-elastic-sip1.jpeg"
-       alt="Create Elastic SIP Trunking"
-     />
-   </Frame>
+### Create the Trunk
+
+1. In your Twilio Console, go to **Elastic SIP Trunking**
+2. Click **Create new SIP Trunk**
+3. Give your trunk a name (e.g., `Konnect-U Trunk`)
+4. Click **Create**
 
 ### Configure Termination (for outbound calls)
 
-4. In the left sidebar, click **Termination**
-5. In the **Termination SIP URI** field, enter only a unique name — for example, `yourcompany`
+5. In the left sidebar, click **Termination**
+6. Set the **Termination SIP URI** to a unique domain like:
 
-   Twilio automatically appends `.pstn.twilio.com`, so your full URI will be: `yourcompany.pstn.twilio.com`
-
-   <Frame>
-     <img
-       src="/resources/twillio-setup-termination1.jpeg"
-       alt="Setup Termination"
-     />
-   </Frame>
-
-<Warning>
-**Only enter the name part** (e.g., `yourcompany`). The `.pstn.twilio.com` suffix is pre-filled by Twilio. Do not paste a full URI or a localized URI (like `london-ix`) into the input field — this will create a malformed address that won't work. The general URI automatically routes traffic to the nearest region.
-</Warning>
-
-<Note>
-**Save this URI** — you will need the full Termination SIP URI (`yourcompany.pstn.twilio.com`) later when importing the number in Step 3.
-</Note>
-
-6. For your SIP trunk to accept outbound requests, you need to set up authentication. Scroll down to **Authentication** and configure IP Access Control Lists:
-
-   Currently the SIP server does not have a static IP, so you need to whitelist all the IP addresses in the range:
+   ```
+   yourcompany.pstn.twilio.com
+   ```
 
    <Frame>
      <img
@@ -105,7 +88,7 @@ Now import the number so the platform knows how to route calls.
 
 1. Go directly to the Phone Numbers page in your dashboard:
 
-   **[https://app.konnect-u.com//phone-numbers](https://app.konnect-u.com//phone-numbers)**
+   **[https://app.konnect-u.com/phone-numbers](https://app.konnect-u.com/phone-numbers)**
 
    If it takes you to the login page, log in first — it will automatically redirect you to the Phone Numbers page.
 
@@ -162,82 +145,6 @@ Now import the number so the platform knows how to route calls.
    <Frame>
      <img
        src="/resources/twillio-autocalls-credentials-ip-type1.png"
-       alt="Credentials IP Type"
+       alt="Twilio IP authorization"
      />
    </Frame>
-
-6. Select the **country** where your SIP trunk is located.
-
-   <Frame>
-     <img
-       src="/resources/twillio-autocalls-sip-country.png"
-       alt="SIP Country selection"
-     />
-   </Frame>
-
-## Step 4: Verify Setup
-
-After configuration:
-
-1. Make a test call to your number
-2. Check that the AI assistant answers
-3. Use the test call feature to verify outbound calling
-
-## Security Requirements
-
-Your SIP credentials need to be secure:
-
-- **Username**: Your extension number or provider-supplied username
-- **Password must have**:
-  - 12 or more characters
-  - Numbers
-  - Upper and lowercase letters
-  - Special characters recommended
-
-## Common Issues
-
-<AccordionGroup>
-  <Accordion title="Do I need to set up Elastic SIP Trunking for every new number?">
-    No. You only create the Elastic SIP Trunk once (Step 1). For each new number, simply assign it to your existing trunk (Step 2) and import it into the platform (Step 3).
-  </Accordion>
-
-  <Accordion title="After connecting, inbound works but outbound does not work?">
-    - **Check your Termination SIP URI** — make sure there are no spaces and it reads correctly (e.g., `yourcompany.pstn.twilio.com`). Verify you only entered the name part in Twilio and didn't accidentally include a localized URI or duplicate the `.pstn.twilio.com` suffix.
-    - **Check your username and credentials** — the username is **not** the same as the "Friendly name" in the credential list. Double-check you entered the actual username.
-
-    <Frame>
-     <img
-       src="/resources/twillio-outbound-not-work.png"
-       alt="Twilio outbound not work"
-     />
-   </Frame>
-  </Accordion>
-
-  <Accordion title="How do I set up dialing to international countries?">
-    1. In the Twilio Console search bar, search for **"geo"** to find **Voice Geographic Permissions**.
-
-    <Frame>
-     <img
-       src="/resources/twillio-setup-dialing-international.png"
-       alt="Twilio setup dialing international"
-     />
-   </Frame>
-
-    2. Choose **"Elastic SIP Trunking"** in the selector, then select the countries you want to dial.
-
-    <Frame>
-     <img
-       src="/resources/twillio-choose-elastic-sip-trunking.png"
-       alt="Twilio choose Elastic SIP Trunking for international dialing"
-     />
-   </Frame>
-  </Accordion>
-</AccordionGroup>
-
----
-
-<Note>
-  Need help setting up? Our support team specializes in helping customers
-  integrate their phone systems. We'll guide you through the entire process,
-  ensuring a smooth setup with your specific phone system configuration.
-</Note>
